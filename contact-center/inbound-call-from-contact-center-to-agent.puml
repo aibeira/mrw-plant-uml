@@ -3,10 +3,11 @@
 
 autonumber
 
-participant "Agent Device" as agent
-participant "SBC" as sbc
-participant Intermedia as im
-participant CPE2 as cpe2
+participant "PSTN" as pstn #BBC6C4
+participant "SBC" as sbc #E3F2FD
+participant Intermedia as im #DAA6AB
+participant CPE2 as cpe2 #E3F2FD
+participant Rater as rtr #E3F2FD
 
 im -> sbc: INVITE\n To: DID2\n From: callerId\n LDN: DID1
 sbc -> cpe2: INVITE\n To: DID2\n From: callerId\n LDN: DID1
@@ -18,5 +19,20 @@ note over cpe2
 end note
 cpe2 -> sbc: INVITE\n To: device\n From: callerId
 sbc -> agent: INVITE\n To: device\n From: callerId
+... (call connects, progresses, and disconnects) ...
+note over cpe2 #cyan
+    publish session
+    summary using
+    contact center
+    product-related
+    data (from LDN DID1)
+end note
+cpe2 -\ rtr: session summary
+note over rtr #cyan
+    process session
+    summary and create
+    CDRs tied to
+    account properly
+end note
 
 @enduml
