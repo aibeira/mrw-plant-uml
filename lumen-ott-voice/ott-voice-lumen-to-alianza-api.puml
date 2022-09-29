@@ -1,0 +1,194 @@
+@startuml
+
+skinparam ClassBackgroundColor #ffffff
+
+package "Purchase Complete operation" {
+    class "PurchaseCompleteRequest" as req #cccccc {
+        **accountNumber** : string
+        accountName : string
+        orderNumber : string
+        emailAddress : string
+        customerFirstName : string
+        customerLastName : string
+        companyName : string
+        magicWindowPayloadId : string
+        shippingAddress : LogisticsAddress
+        billingAddress : LogisticsAddress
+        serviceAddress : ServiceAddress
+    }
+
+    class "LogisticsAddress" as la {
+        firstName : string
+        lastName : string
+        company : string
+        address1 : string
+        address2 : string
+        city : string
+        state : string
+        zip : string
+        country : string
+        phone : string
+    }
+
+    class "ServiceAddress" as sa {
+        id : string
+        firstName : string
+        middleInitial : string
+        lastName : string
+        businessName : string
+        streetNumber : string
+        streetNumberSuffix : string
+        preDirectional : Directional
+        streetName : string
+        streetSuffix : string
+        postDirectional : Directional
+        city : string
+        state : string
+        country : string
+        postalCode : string
+        secondaryLocationDescription : None
+        unit : string
+        customerType : CustomerType
+        firstNameSecondary : string
+        blockCustomerName : true
+        customerName : string
+    }
+
+    enum "CustomerType" as ct {
+        BUSINESS
+        RESIDENTIAL
+    }
+
+    enum "Directional" as dir {
+        N
+        NW
+        W
+        SW
+        S
+        SE
+        E
+        NE
+    }
+
+    sa --{ dir
+    sa -- ct
+    req -- sa
+    req -- la
+
+    dir -[hidden] ct
+
+    class "PurchaseCompleteResponse" as resp #cccccc {
+        responseCode : int
+        responseMessage : string
+        accountId : string
+        cpeOrderId : string
+    }
+
+    req -[hidden] resp
+}
+
+newpage
+
+skinparam ClassBackgroundColor #ffffff
+
+package "Customer Configuration Status operation" as ccs {
+    class "CustomerConfigurationStatusRequest" as req #ccc {
+        accountId : string
+        accountNumber : string
+        status : CustomerConfigurationStatusType
+    }
+    
+    enum "CustomerConfigurationStatusType" as ccst {
+        COMPLETE
+        PARTIALLY_COMPLETE
+        NOT_STARTED
+        IMPEDED
+    }
+    
+    req -- ccst
+
+    class "CustomerConfigurationStatusResponse" as resp #ccc {
+        statusCode : int
+        statusMessage : string
+    }
+
+    req -[hidden] resp
+}
+
+newpage
+
+skinparam ClassBackgroundColor #ffffff
+
+package "Account Cancelled / Deleted operation" as resp_p {
+    class "AccountDeleteRequest" as req #ccc {
+        accountNumber : string
+    }
+
+    class "AccountDeleteResponse" as resp #ccc {
+        statusCode : int
+        statusMessage : string
+    }
+
+    req -[hidden] resp
+}
+
+newpage
+
+skinparam ClassBackgroundColor #ffffff
+
+package "Order Shipped operation" as ds_p {
+    class "OrderShippedRequest" as req #ccc {
+        accountNumber : string
+        cpeOrderId : string
+        macAddresses : string[]
+        carrier : string
+        carrierTrackingCode : string
+    }
+
+    class "OrderShippedResponse" as resp #ccc {
+        statusCode : int
+        statusMessage : string
+    }
+
+    req -[hidden] resp
+}
+
+newpage
+
+skinparam ClassBackgroundColor #ffffff
+
+package "TN Inventory Low operation" as til_p {
+    class "TnInventoryLowRequest" as req #ccc {
+        accountNumber : string
+        rateCenter : string
+        numberOfTnsOrdered : int
+    }
+
+    class "TnInventoryLowResponse" as resp #ccc {
+        statusCode : int
+        statusMessage : string
+    }
+
+    req -[hidden] resp
+}
+
+newpage
+
+skinparam ClassBackgroundColor #ffffff
+
+package "TN Inventory Replenished operation" as tir_p {
+    class "TnInventoryReplenishedRequest" as req #ccc {
+        accountNumber : string
+        rateCenter : string
+        numberOfTnsInInventory : int
+    }
+
+    class "TnInventoryReplenishedResponse" as resp #ccc {
+        statusCode : int
+        statusMessage : string
+    }
+
+    req -[hidden] resp
+}
+
+@enduml

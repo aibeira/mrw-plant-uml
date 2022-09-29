@@ -1,0 +1,26 @@
+@startuml
+'https://plantuml.com/component-diagram
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v11.1/dist
+!include <awslib/AWSCommon>
+!include <awslib/Compute/all>
+!include <awslib/Database/all>
+!includeurl AWSPuml/ApplicationIntegration/all.puml
+!include <awslib/AWSSimplified>
+Lambda(datapump, "datapump",)
+ElasticContainerService(stservice, "sip-trunk-service",)
+ElasticContainerService(state, "platform state",)
+ElasticContainerService(edge, "edge proxy",)
+DynamoDB(dynamo,"Config Datastore",)
+SimpleNotificationService(sttopic, "SipTrunk SNS",)
+[SBC]
+[AX]
+AX -right-> sttopic
+sttopic -right-> datapump
+datapump -right-> dynamo
+AX -[hidden]-> SBC
+SBC --> stservice
+stservice --> dynamo
+dynamo --> stservice
+stservice -right-> state
+stservice --> edge
+@enduml

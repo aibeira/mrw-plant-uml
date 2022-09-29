@@ -1,0 +1,56 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+participant "Service Provider" as sp
+participant "Alianza" as alz
+participant "Bandwidth" as bw
+
+sp -> alz: add BYOTN to inventory
+note over alz #cyan
+    create BYOTN SAE
+end note
+alz -> bw: create BYOTN order\n(/importTnOrder/voice)
+note over bw #lightgreen
+    validate TN
+    can be added
+end note
+alt "can be added"
+    bw -> alz: OK w/ order ID
+    alz -> sp: order created
+else "cannot be added"
+    bw -> alz: Error
+    note over alz #cyan
+        close BYOTN SAE w/ error
+    end note
+    alz -> sp: error
+end
+... [time passes] ...
+note over bw #lightgreen
+    provision new
+    TN in routing
+end note
+alt "successfully provisioned"
+    bw -> alz: order complete
+    alz -> bw: OK
+    note over alz #cyan
+        close BYOTN SAE w/ success
+    end note
+    note over alz #cyan
+        add TN to inventory
+    end note
+    alz -> sp: notification of success
+    sp -> alz: OK
+else "failed provisioning"
+    bw -> alz: order failure
+    alz -> bw: OK
+    note over alz #cyan
+        close BYOTN SAE w/ error
+    end note
+    alz -> sp: notification of error
+    sp -> alz: OK
+end
+
+
+@enduml

@@ -1,0 +1,56 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+participant "Service Provider" as sp
+participant "Alianza" as alz
+participant "Bandwidth" as bw
+
+note over alz #cyan
+    remove TN
+    from account
+end note
+alz -> bw: deactivate TN
+...
+note over bw #lightgreen
+    process
+    deactivation
+end note
+...
+alt "deactivate complete"
+    bw -> alz: deactivate complete
+    note over alz #cyan
+        put TN in BYOTN cooldown
+    end note
+else "deactivate failure"
+    bw -> alz: deactivate failure
+    note over alz #cyan
+        notify of failure
+    end note
+    note over alz #cyan
+        manually work
+        deactivation
+    end note
+    note over alz #cyan
+        put TN in BYOTN cooldown
+    end note
+end
+...
+alt "BYOTN cooldown expires"
+    note over alz #cyan
+        return TN to
+        inventory
+    end note
+else "recovered"
+    note over alz #cyan
+        return TN to
+        inventory
+    end note
+else "manually removed"
+    note over alz #cyan
+        remove BYOTN from
+        inventory process
+    end note
+end
+@enduml

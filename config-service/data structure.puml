@@ -1,0 +1,53 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+
+class "Key" as k {
+    **id : string**
+    childKeys : Key[]
+    values : Value[]
+    permissions : string[]
+}
+
+class "Value" as v {
+    type : string
+    value : string
+}
+
+k --{ v
+k }o-- k
+
+class "system" as sys <<(K,#cccccc)>>
+
+class "parition.a" as pa <<(K,#cccccc)>>
+
+class "parition.b" as pb <<(K,#cccccc)>>
+
+class "account.a.1" as aa1 <<(K,#cccccc)>>
+
+class "account.a.2" as aa2 <<(K,#cccccc)>>
+
+class "account.b.1" as ab1 <<(K,#cccccc)>>
+
+class "account.b.2" as ab2 <<(K,#cccccc)>>
+
+class "proxy.url.access" as spu <<(V,#ccffcc)>> {
+    sip:sbc-access.alianza.com:5065
+}
+
+class "proxy.url.access" as papu <<(V,#ccffcc)>> {
+    sip:sbc-partition-a.alianza.com:5065
+}
+
+sys <-- pa
+sys <-- pb
+sys <- spu
+
+pa <-- aa1
+pa <-- aa2
+
+papu -> pa
+pb <-- ab1
+pb <-- ab2
+
+@enduml

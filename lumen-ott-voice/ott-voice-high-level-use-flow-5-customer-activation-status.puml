@@ -1,0 +1,31 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+'skinparam ParticipantPadding 20
+skinparam ParticipantMaxSize 100
+skinparam BoxMargin 10
+skinparam maxmessagesize 85
+skinparam RoundCorner 10
+
+box Alianza work to be done here
+    participant "OTT \nVoice \nAPI" as ottapi #cceeff
+    participant "Activation UI" as eup #cceeff
+end box
+participant "Lumen \nBack \nEnd" as lsfc #ee99ff
+
+group customer activation status notification
+    note over ottapi
+        starting 12 hours
+        after buy-flow
+        complete and
+        every 24 hours
+        afterward
+    end note
+    opt if customer has not completed activation
+        ottapi -> lsfc: "customer has not completed activation"
+    end
+end
+
+@enduml

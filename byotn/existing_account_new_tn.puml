@@ -1,0 +1,15 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+|ILEC/Service Provider|
+
+start
+#lightblue:Open/select Account;
+#lightblue:Select new TN from inventory;
+#lightblue:Add new TN to Account;
+|Alianza|
+:Provision new TN E911 w/ Bandwidth;
+:Provision new TN in routing;
+stop
+
+@enduml

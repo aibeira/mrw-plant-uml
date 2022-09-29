@@ -1,0 +1,45 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+'skinparam ParticipantPadding 20
+skinparam ParticipantMaxSize 100
+skinparam BoxMargin 10
+skinparam maxmessagesize 85
+skinparam RoundCorner 10
+
+actor "customer" as u
+box Alianza work to be done here
+    participant "Activation UI" as eup #cceeff
+    participant "OTT \nVoice \nAPI" as ottapi #cceeff
+end box
+participant "Alianza \nPlatform" as ax #cceeff
+participant "Lumen \nBack \nEnd" as lsfc #ee99ff
+participant "Lumen/L3 \nB2B API" as l3b2b #ee99ff
+
+group user initial access to activation portal
+    u -> eup: initial access
+    eup -> ax: get theme for brand
+    opt is porting?
+        eup <-> u: (collect porting information)
+        eup -> ottapi: start ports
+        ottapi -> ax: create account & start ports
+        ax -> l3b2b: start ports
+    else is not porting
+        eup <-> u: (verify servie address information, inc. # of TNs)
+        ottapi -> ax: reserve TNs
+        ax -> l3b2b: reserve TNs
+        opt short TNs in dynamic inventory
+            ax -> ottapi: "insufficient inventory"
+            ottapi -> eup: "Insufficient TNs available, try again later"
+            eup -> u: "Insufficient TNs available, try again later"
+            note over ottapi: record \nshortage \non order
+            ottapi -> lsfc: "short TNs in rate center {X}"
+        else have enough TNs available
+            ax -> ottapi: TNs reserved
+        end
+    end
+end
+
+@enduml

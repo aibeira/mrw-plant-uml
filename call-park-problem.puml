@@ -1,0 +1,48 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+participant "x3000 (sac)" as x3000
+participant "x3001 (ash)" as x3001
+participant "x3002 (sac)" as x3002
+
+x3001 -> x3000: INVITE
+note over x3001: park call in slot 100
+note over x3002: retrieve call from slot 100
+note over x3002: park call in slot 100
+note over x3000,x3002: call drop (x3000 drops)
+
+newpage
+
+x3001 -> x3000: INVITE
+note over x3000: park call in slot 100
+note over x3002: retrieve call from slot 100
+note over x3002: park call in slot 100
+note over x3000,x3002: call drop (x3001 drops)
+
+newpage
+
+x3000 -> x3001: INVITE
+note over x3000: park call in slot 100
+note over x3002: retrieve call from slot 100
+note over x3002: park call in slot 100
+note over x3000,x3002: call drop (x3001 drops)
+
+newpage
+
+x3000 -> x3001: INVITE
+note over x3001: park call in slot 100
+note over x3002: retrieve call from slot 100
+note over x3002: park call in slot 100
+note over x3000,x3002: call drop (x3001 drops)
+
+newpage
+
+x3000 -> x3001: INVITE
+note over x3001: park call in slot 100
+note over x3001: retrieve call from slot 100
+note over x3001: park call in slot 100
+note over x3000,x3002: call drop (x3001 drops)
+
+@enduml

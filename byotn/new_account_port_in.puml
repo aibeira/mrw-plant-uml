@@ -1,0 +1,17 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+|ILEC/Service Provider|
+
+start
+#lightblue:Create Account;
+#lightgreen:Create, manage, and complete port;
+#lightblue:Add ported TN to Account;
+|Alianza|
+#cyan:Add BYOTN Inventory process for ported TN;
+|Alianza|
+:Provision ported TN E911 w/ Bandwidth;
+:Provision ported TN in routing;
+stop
+
+@enduml

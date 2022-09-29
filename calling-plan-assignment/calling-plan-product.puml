@@ -1,0 +1,32 @@
+@startuml
+'https://plantuml.com/component-diagram
+
+hide stereotype
+
+skinparam node {
+    FontColor<<new>> #ffffff
+    FontStyle<<new>> bold
+    BackgroundColor<<new>> #0072BC
+
+    BackgroundColor<<existing>> #CCCCCC
+}
+
+node "Rater" as r <<existing>>
+node "Authorizer" as a <<existing>>
+node "Ax" as ax <<existing>>
+node "Calling Plan Rates" as cpr <<existing>>
+node "Specialty Lines" as sl <<existing>>
+node "SIP Trunks" as st <<existing>>
+node "Calling Plan Assignment" as cpa <<new>> <<existing>>
+
+r "retrieve assignments &\n debit minutes"--> cpa
+a "retrieve assignments"--> cpa
+
+cpr <--"retrieve prefixes" r
+cpr <--"retrieve prefixes" a
+
+cpa <--> "manage user & \naccount assignment" ax
+cpa <---> "manage specialty \nline assignment" sl
+cpa <--> "manage sip trunk assignment" st
+
+@enduml

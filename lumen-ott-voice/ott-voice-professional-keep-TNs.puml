@@ -1,0 +1,323 @@
+@startuml
+
+actor "consumer" as c #ffffff
+participant "Lumen" as lws #ee99ff
+participant "Alianza \n OTT Voice" as aws #cceeff
+participant "Alianza \n Platform" as ax #cceeff
+participant "<font color=white>NETXUSA" as nx #24117E
+participant "'Red Network' \n B2B API" as l3b #ee99ff
+participant "Polycom \n Analytics" as poly #ffcccc
+
+group initial order
+note over c
+    consumer begins
+    purchasing broadband
+end note
+note over c,nx #cceeff
+   <b>refer to TDD diagram for MW flow
+   <b>https://alianza.atlassian.net/wiki/spaces/DEV/pages/1932230768
+end note
+note over aws #ff0000
+    <font color=white><b>Put help me choose button and
+    <font color=white><b>help link outside the iframe?
+end note
+
+note over c: consumer finalizes purchase
+lws -> c: collect payment, \n\
+    shipping, billing, etc...
+c -> lws: provide payment, \n\
+    shipping, billing, etc.
+note over lws
+    complete order
+    process, collect
+    payment, etc...
+end note
+lws -> aws: signal completion \n\
+    of order, including: \n\
+        • OTT Voice Selection Id \n\
+        • Lumen Order ID \n\
+        • billing address \n\
+        • shipping address \n\
+        • service address \n\
+        • contact information \n\
+        • account number \n\
+        • account name \n\
+        • company name \n\
+        • email address
+note over aws: store order information \n\
+        • billing address \n\
+        • shipping address \n\
+        • contact information \n\
+        • account number \n\
+        • account name \n\
+        • company name
+aws -> nx: place order for devices \n\
+        • include Lumen Order ID as PO
+note over aws #ff0000
+    <font color=white><b>Multiple shipping addresses?
+    <font color=white><b>Extra cost to multiple shipping addresses?
+end note
+nx -> aws: confirm order \n\
+        • NETXUSA order ID
+aws -> ax: create account \n\
+        • create shell \n\
+        • assign new TNs \n\
+        • create first End User \n\
+            ◦ extension: 2000 \n\
+                (can be changed later) \n\
+            ◦ no caller ID at this point \n\
+                (cannot place all calls) \n\
+            ◦ use account number\n\
+                as username?
+note over aws #ff0000
+    <font color=white><b>What happens if there are not 
+    <font color=white><b>enough TNs in service area?
+end note
+ax -> c: "Welcome email" (about first user)
+
+note over aws #ff0000
+    <font color=white><b>Do we need a custom version of
+    <font color=white><b>the Account Manager email, or
+    <font color=white><b>will the default work?
+end note
+
+end
+
+newpage
+
+...
+
+group NETXUSA order ships
+note over aws,nx #ff0000
+    <font color=white><b>What other states or flows are
+    <font color=white><b>possible for the NETXUSA orders,
+    <font color=white><b>and how do we react to them?
+end note
+
+note over nx
+    order
+    progresses
+    to "invoice
+    linked" and
+    is shipped
+end note
+nx -> poly: register MAC \n\
+    Addresses
+nx -> aws: "invoice linked" event \n\
+        • NETXUSA order ID \n\
+        • Lumen Order ID \n\
+        • tracking information \n\
+        • device MAC addresses
+note over aws,nx #ff0000
+        <font color=white><back:red><b>Will we get all device
+        <font color=white><back:red><b>MAC addresses at once
+        <font color=white><back:red><b>(multiple shipments /
+        <font color=white><back:red><b>multiple tracking numbers)?
+end note
+note over aws
+    store MAC addresses
+    associated with account
+end note
+aws -> lws: provide NETXUSA order information \n\
+        • Lumen Order ID \n\
+        • tracking information \n\
+        • device MAC addresses
+note over aws,nx #ff0000
+    <font color=white><b>Do we need to react to tracking updates?
+end note
+note over aws,nx #ff0000
+    <font color=white><b>What to do if shipment is lost?
+end note
+note over aws,nx #ff0000
+    <font color=white><b>Shipment returned to sender?
+end note
+note over aws,nx #ff0000
+    <font color=white><b>Partial / delayed shipments?
+end note
+end
+
+...
+
+group port check on Alianza side (every hour)
+note over aws
+    check for
+    outstanding
+    porting data
+    that has not
+    been provided
+    by customer
+    after 12 hours
+    <i>note</i>: 12 hours from
+       order placement
+       and after each
+       notification to
+       Lumen
+end note
+note over aws #f00
+    <font color=white><b>Where exactly is the notification
+    <font color=white><b>being sent? SFDC, or other?
+end note
+loop "for each incomplete port found"
+    aws -> lws: notify that customer \n\
+        has not completed port \n\
+        • OTT Voice Selection Id
+    note over lws
+        react:
+        • email reminder
+        • reschedule /
+            postpone install
+        • cancel order
+    end note
+    opt "if order cancelled"
+        lws -> aws: notify of cancelled order \n\
+        • OTT Voice Selection Id
+        aws -> ax: clean up account
+        aws -> nx: cancel order
+note over aws #f00
+    <font color=white><b>What to do if shipped?
+end note
+note over aws #f00
+    <font color=white><b>Send notification when
+    <font color=white><b>the porting information
+    <font color=white><b>is completed?
+end note
+
+    end
+end
+end
+
+newpage
+
+...
+
+group customer completes porting
+note over c
+    clicks button
+    on confirmation
+    <b>or</b>
+    clicks link
+    in email w/
+    unique code
+    <b>or</b>
+    logs into end
+    user portal w/
+    end user
+    credentials
+end note
+aws -> c: provide porting \n\
+    information form \n\
+    (pre-filled as much \n\
+    as possible)
+c -> aws: provide porting information
+aws -> l3b: initiate ports
+note over aws #080
+    <font color=white><b>Porting exceptions handled
+    <font color=white><b>out-of-band manually by Lumen
+end note
+note over aws #f00
+    <font color=white><b>What do when TN isn't portable?
+end note
+note over aws #f00
+    <font color=white><b>Does Alianza need to send Lumen
+    <font color=white><b>something about the port starting?
+end note
+note over aws #f00
+    <font color=white><b>What about delays in device shipping as it
+    <font color=white><b>affects porting (delay port, change date, etc...)?
+end note
+end
+
+group customer completes device/user configuration
+note over c
+    clicks button
+    on confirmation
+    <b>or</b>
+    clicks link
+    in email w/
+    unique code
+    <b>or</b>
+    logs into end
+    user portal w/
+    end user
+    credentials
+end note
+aws -> c: collect data \n\
+    for each user: \n\
+    • first name \n\
+    • last name \n\
+    • username \n\
+    • email address \n\
+    • device MAC address \n\
+        (selector if MAC \n\
+        addresses available) \n\
+    • TN selection \n\
+    • extension
+c -> aws: provide data
+aws -> ax: configure account
+note over aws #ff0000
+    <font color=white><b>Do we want a similar notification
+    <font color=white><b>system for device/user configuration
+    <font color=white><b>not completed as we have to porting
+    <font color=white><b>not completed?
+end note
+note over aws #ff0000
+    <font color=white><b>Do we need a way to change the
+    <font color=white><b>Account Manager into an End User?
+    <font color=white><b>(Can the initial email address
+    <font color=white><b>be exluded from the end user choices?)
+end note
+end
+
+newpage
+
+...
+...
+
+note over aws #ff0000
+     <font color=white><b>Are there Lumen side events
+     <font color=white><b>we need to react to in some way?
+end note
+
+note over aws #ff0000
+     <font color=white><b>What actions can the consumer take
+     <font color=white><b>in the EUP?
+     <font color=white><b>  • Add/Update/Delete Virtual FAX
+     <font color=white><b>  • Add/Update/Delete Groups
+     <font color=white><b>  • Add/Update/Delete Users
+     <font color=white><b>    ◦ Call Handling
+     <font color=white><b>    ◦ Call Screening
+     <font color=white><b>    ◦ CallerID
+     <font color=white><b>    ◦ Language
+     <font color=white><b>    ◦ Other calling features (CW, CID, ...)
+     <font color=white><b>  • Add/Update/Delete TNs
+     <font color=white><b>    ◦ E911/CSR/CallerID
+     <font color=white><b>    ◦ Routing
+     <font color=white><b>  • Add/Update/Delete Devices
+     <font color=white><b>    ◦ Configuration fields
+     <font color=white><b>  • Add/Update/Delete Calling Plans
+     <font color=white><b>  • Add/Update/Delete Voicemail
+     <font color=white><b>  • Add/Update/Delete Auto Attendant
+     <font color=white><b>  • Manage Account settings
+     <font color=white><b>    ◦ Emergency Notification
+     <font color=white><b>    ◦ Route Plan
+     <font color=white><b>    ◦ Calling Plan
+     <font color=white><b>    ◦ Call Screening
+     <font color=white><b>    ◦ Dialing Behavior
+     <font color=white><b>    ◦ Hold Music
+     <font color=white><b>    ◦ Time Zone
+     <font color=white><b>    ◦ Account Name
+     <font color=white><b>    ◦ Account Number
+     <font color=white><b>  • Call History
+end note
+
+note over aws #ff0000
+     <font color=white><b>As customers make updates
+     <font color=white><b>and changes in the EUP, do
+     <font color=white><b>we need to push something
+     <font color=white><b>to Lumen?
+end note
+
+...
+...
+
+@enduml

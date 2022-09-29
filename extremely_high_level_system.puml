@@ -1,0 +1,96 @@
+@startuml
+'https://plantuml.com/component-diagram
+
+hide stereotype
+
+skinparam rectangle<<hidden>> {
+    backgroundColor Transparent
+    borderColor Transparent
+    shadowing false
+    stereotypeFontColor Transparent
+    fontColor Transparent
+}
+
+skinparam rectangle<<justname>> {
+    backgroundColor Transparent
+    borderColor Transparent
+    shadowing false
+    stereotypeFontColor Transparent
+}
+
+skinparam defaultTextAlignment center
+
+cloud "Devices" as dev #fff
+'cloud "Devices B" as devb #fff
+cloud "SIP Trunk" as sta #fff
+cloud "Carriers" as pstn #fff
+cloud "API Integrations" as apic #fff
+rectangle "Portals" as portals #f2e066
+cloud "Alianza API" as api #f2e066/b0dfe8
+cloud "Config \nServices" as cfg  #f2e066/b0dfe8
+cloud "Device \nProvisioning" as prov #f2e066
+rectangle "Access SLB/SBC" as asbc #b0dfe8
+rectangle "Peer SBC" as psbc #b0dfe8
+rectangle "Platform Director" as pd #b0dfe8
+cloud "CPE1" as cpe1 #b0dfe8
+cloud "CPE2" as cpe2 #f2e066
+cloud "Carrier \nProvisioning \nAPIs" as ic #fff
+rectangle "Carrier \nIntegrations" as ci #f2e066
+
+dev -[thickness=5]-> prov #green
+dev <--> asbc #000
+'devb <--> asbc #000
+sta <--> asbc #000
+pstn <--> psbc #000
+asbc --> pd #000
+psbc --> pd #000
+'pd --> cpe1 #000
+asbc <--> cpe1 #000
+psbc <--> cpe1 #000
+'pd --> cpe2 #000
+asbc <--> cpe2 #000
+psbc <--> cpe2 #000
+portals -[thickness=5]-> api #green
+apic -[thickness=5]-> api #green
+api ..> cfg
+ic <-[thickness=5]-> ci #green
+cfg <..> ci
+api -[hidden]- ic
+cfg .> pd
+cfg <..> cpe1
+cfg <..> cpe2
+prov <.. cfg
+asbc -[hidden] psbc
+cpe1 -[hidden] pd
+pd -[hidden] cpe2
+'devb -[hidden] dev
+sta -[hidden] dev
+
+rectangle "Legend" as legend {
+    rectangle "On-prem" as l1 #b0dfe8
+    rectangle "Mixed (On-prem / AWS)" as l2 #f2e066/b0dfe8
+    rectangle "AWS" as l3 #f2e066
+    l1 -[hidden] l2
+    l2 -[hidden] l3
+
+    rectangle "https" as h1 <<justname>>
+    rectangle h2 <<hidden>>
+    h1 -[thickness=5] h2 #green
+
+    rectangle "sip" as s1 <<justname>>
+    rectangle s2 <<hidden>>
+    s1 - s2 #000
+
+    rectangle "other" as o1 <<justname>>
+    rectangle o2 <<hidden>>
+    o1 . o2
+
+    l1 -[hidden]- h1
+    l2 -[hidden]- s1
+    l3 -[hidden]- o1
+}
+
+cpe1 -[hidden]- legend
+
+
+@enduml

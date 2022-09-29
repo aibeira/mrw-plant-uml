@@ -1,0 +1,48 @@
+@startuml
+!include <aws/common>
+!include <aws/Storage/AmazonS3/AmazonS3>
+
+!define Table(name,desc) class name as "desc" << (T,#ffaaaa) >>
+!define primary_key(x) <b>x</b>
+!define foreign_key(x) <i><color:blue>x</color></i>
+!define deprecated(x) <s>x</s>
+!define new(x) <i><color:yellow>x</color></i>
+
+hide methods
+
+database "emergency_location" as loc {
+    Table(l, "location") {
+        primary_key(id) UUID
+        name TEXT
+        partition_id TEXT
+        account_id TEXT
+        owner_id TEXT
+        owner_type TEXT
+        street_number TEXT
+        street_number_suffix TEXT
+        pre_directional TEXT
+        street_name TEXT
+        post_directional TEXT
+        city TEXT
+        state TEXT
+        postal_code TEXT
+        country TEXT
+        latitude TEXT
+        longitude TEXT
+        callback_number TEXT
+        locale TEXT
+        non_fixed_provider TEXT
+        fixed_provider TEXT
+    }
+
+    Table(d, "dialer") {
+        primary_key(id) TEXT
+        primary_key(dialer_type) TEXT
+        name TEXT
+        foreign_key(assigned_location_id) UUID
+        routing_type FIXED / NON_FIXED
+    }
+
+    l ||-o{ d
+}
+@enduml

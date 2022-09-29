@@ -1,0 +1,15 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+|ILEC/Service Provider|
+
+|Alianza|
+start
+:Remove TN from Inventory;
+:Remove TN from Bandwidth;
+|Bandwidth|
+:Remove TN from routing;
+|Alianza|
+stop
+
+@enduml

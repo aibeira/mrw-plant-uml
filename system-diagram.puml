@@ -1,0 +1,34 @@
+@startuml
+
+cloud Intrado as i
+cloud Bandwidth as bw
+node "peering SBC" as sbc
+node "911-routing" as r9 #44ddff
+cloud CPE1 as cpe1
+cloud CPE2 as cpe2
+node "access SBC" as asbc
+node "platform director" as pd
+cloud "devices" as d
+
+
+i <-- sbc
+bw <-- sbc
+sbc <-- r9
+r9 <-- cpe1: inc \n'vsl-id' \n& optionally \nfromHost
+'r9 <-- cpe2
+sbc <-- cpe2
+cpe1 <-- pd
+cpe2 <-- pd
+pd <-- asbc
+asbc <-- d
+note left of r9
+  * add emergency
+     header based
+     on 'vsl-id'
+  * (if no fromHost)
+     dynamically
+     route based
+     on 'vsl-id'
+end note
+
+@enduml

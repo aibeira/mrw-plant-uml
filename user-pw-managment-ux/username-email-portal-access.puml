@@ -1,0 +1,29 @@
+@startuml
+
+start
+
+if (
+  partition.legacyEndUserPortalAccess
+  || input.tier == ADVANCED
+  || input.tier == PROFESSIONAL
+) then (yes)
+  :input.portalAccess = true;
+else (no)
+endif
+if (input.portalAccess) then (yes)
+  :validate input.username (required and unique);
+  if (
+    !partition.legacyEndUserPortalAccess
+    && account.platformType != CPE2
+  ) then (yes)
+    :validate input.emailAddress (required and unique);
+  else (no)
+    if (input.emailAddress present) then (yes)
+      :validate input.emailAddress (unique);
+    endif
+  endif
+endif
+:validate input as existing;
+end
+
+@enduml

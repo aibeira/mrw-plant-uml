@@ -1,0 +1,46 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor "mobile 1" as m1
+actor "mobile 2" as m2
+participant "CaptionCall \npush server" as ps #0a6
+participant "Alianza" as alz #8cf
+participant "pstn" as pstn
+participant "Apple/Google Push" as push
+
+pstn -> alz: INVITE TN
+alz -> ps: INVITE
+ps -> push: "wake devices"
+push -> m1: "wake up"
+note over m1
+    start ringing
+end note
+push -> m2: "wake up"
+note over m2
+    start ringing
+end note
+
+... (ring times out) ...
+
+alz -> ps: CANCEL
+ps -> m1: "cancel"
+note over m1
+    stop ringing
+    (if it hasn't
+    already)
+end note
+ps -> m2: "cancel"
+note over m2
+    stop ringing
+    (if it hasn't
+    already)
+end note
+alz -> pstn: 200 (RTP to alz)
+alz --> pstn: audio (voicemail interaction)
+pstn --> alz: audio (interact with voicemail)
+pstn -> alz: BYE
+alz -> pstn: Ok
+
+@enduml

@@ -1,0 +1,65 @@
+@startgantt
+<style>
+    task {
+        FontSize 16
+        FontStyle bold
+        FontColor navy
+        BackgroundColor lightyellow
+        LineColor black
+    }
+    timeline {
+        BackgroundColor lightblue
+    }
+    arrow {
+        LineColor white
+    }
+    milestone {
+        FontSize 16
+    }
+</style>
+projectscale monthly zoom 1
+
+Project starts 2022-03-01
+then [Aerospike upgrade] lasts 8 weeks and is colored in #173f5f
+then [Common Registration] lasts 8 weeks and is colored in #20639b
+then [Mobile 911 implementation] lasts 8 weeks and is colored in #173f5f
+then [SIP Trunk CPE2] as [ST CPE2] lasts 16 weeks and is colored in #20639b
+[Migrate SIP Trunks CPE2] as [mst]  starts after [ST CPE2]'s end and lasts 52 weeks and is colored in #f6d55c
+[Common VM Msg Management] lasts 10 weeks and starts after [ST CPE2]'s end and is colored in #20639b
+then [Cassandra upgrade] lasts 8 weeks and is colored in #173f5f
+then [Shared MWI] lasts 10 weeks and is colored in #20639b
+then [Business Lines/Residential TUI Parity] as [BL/Resi TUI Parity] lasts 10 weeks and is colored in #20639b
+then [Business Lines on CPE2] as [BL CPE2] lasts 8 weeks and is colored in #20639b
+[Migrate Business Lines to CPE2] as [Migrate BL CPE2] lasts 26 weeks and is colored in #f6d55c and starts after [BL CPE2]'s end
+[Residential CPE2 Parity] as [resi] lasts 12 weeks and starts after [BL CPE2]'s end and is colored in #20639b
+[Migrate Residential CPE2] as [resim] lasts 52 weeks and is colored in #f6d55c and starts after [resi]'s end
+[CPE1 shutdown] as [cpe1sd] happens on 2 weeks after [resim]'s end and displays on same row as [resim]
+then [ ] as [end] lasts 1 day and is colored in #fff
+
+
+'[Maintain CPE1] starts 2022-01-01 and ends after [cpe1sd]'s end and is colored in #3caea3
+'[Incidentals] starts 2022-01-01 and ends after [end]'s end and is colored in #ed553b
+'[Bug Fixes] starts 2022-01-01 and ends after [end]'s end and is colored in lightgrey
+
+[CPE1-to-CPE2] starts 2023-06-01 and lasts 6 weeks and is colored in #20639b
+[Essential] starts 2023-06-01 and lasts 6 weeks and is colored in #173f5f
+[😀] as [spacer] starts 2023-06-01 and lasts 6 weeks and is colored in white
+
+2022-01-01 is colored in black
+'2022-04-01 is colored in lightgrey
+'2022-07-01 is colored in lightgrey
+'2022-10-01 is colored in lightgrey
+2023-01-01 is colored in black
+'2023-04-01 is colored in lightgrey
+'2023-07-01 is colored in lightgrey
+'2023-10-01 is colored in lightgrey
+2024-01-01 is colored in black
+'2024-04-01 is colored in lightgrey
+'2024-07-01 is colored in lightgrey
+'2024-10-01 is colored in lightgrey
+2025-01-01 is colored in black
+'2025-04-01 is colored in lightgrey
+'2025-07-01 is colored in lightgrey
+'2025-10-01 is colored in lightgrey
+
+@endgantt

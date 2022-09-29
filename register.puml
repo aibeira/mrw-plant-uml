@@ -1,0 +1,31 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+participant "device" as dev
+participant "sbc" as sbc
+participant "platform \ndirector" as pd
+participant "call \ndirector" as cd
+participant "registrar" as reg
+
+dev -> sbc: REGISTER w/o auth
+sbc -> pd: REGISTER w/o auth
+pd -> sbc: 302 Redirect to CD
+sbc -> cd: REGISTER w/o auth
+cd -> reg: Register w/o auth
+reg -> cd: Authenticate w/ password
+cd -> sbc: 401 Unauthorized w/ auth challenge
+sbc -> dev: 401 Unauthorized w/ auth challenge
+dev -> sbc: REGISTER w/ auth
+sbc -> pd: REGISTER w/ auth
+pd -> sbc: 302 Redirect to CD
+sbc -> cd: REGISTER w/ auth
+note over cd
+  validate authentication
+end note
+cd -> reg: Register complete
+cd -> sbc: 200 Ok w/ expires
+sbc -> dev: 200 Ok w/ expires
+
+@enduml

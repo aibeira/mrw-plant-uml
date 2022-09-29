@@ -1,0 +1,28 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+participant PSTN as pstn
+participant "Peering SBC" as psbc
+participant Intermedia as im
+participant CPE2 as cpe2
+
+pstn -> psbc: INVITE \n To: DID1\n From: callerId
+psbc -> cpe2: INVITE \n To: DID1\n From: callerId
+note over cpe2
+  resolve DID1
+  to account
+end note
+note over cpe2
+  determine DID1
+  is routing to
+  contact-center
+end note
+cpe2 -> psbc: INVITE \n To: DID1\n From: callerId\n (identifies Intermedia \nTrunk as target)
+psbc -> im: INVITE \n To: DID1\n From: callerId
+note over im
+    route call to IVR,
+    queue, or etc...
+end note
+@enduml

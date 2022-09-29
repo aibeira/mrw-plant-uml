@@ -1,0 +1,25 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+'skinparam ParticipantPadding 20
+skinparam ParticipantMaxSize 100
+skinparam BoxMargin 10
+skinparam maxmessagesize 85
+skinparam RoundCorner 10
+
+actor "customer" as u
+box Alianza work to be done here
+    participant "OTT \nVoice \nAPI" as ottapi #cceeff
+end box
+participant "Branding \nService" as brand #cceeff
+participant "Lumen \nBack \nEnd" as lsfc #ee99ff
+
+group TNs in rate center replenished
+    lsfc -> ottapi: "TNs in rate center {X} replenished"
+    ottapi -> brand: "get theme for brand"
+    ottapi --\ u: (email) "TNs available, please retry activation"
+end
+
+@enduml

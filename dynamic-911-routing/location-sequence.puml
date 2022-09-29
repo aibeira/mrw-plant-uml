@@ -1,0 +1,114 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor User as "Portal"
+participant EL as "Emergency Locations"
+participant "SmartyStreets" as ss
+participant "Melissa Data" as md
+participant "E911 Provider" as e911p
+queue dialerq as "Dialers' Queues"
+queue eltopic as "Emergency Locations\nTopic"
+
+== Display Location Management page ==
+User -> EL: List Emergency Locations\nwith assignments
+EL -> User: Emergency Location List
+
+== Create a new Emergency Location ==
+User -> EL: Validate location address
+EL -> ss: validate address
+EL -> md: validate address
+EL -> e911p: MSAG validation w/ provider
+EL -> User: Address is valid
+User -> EL: Create a location
+EL -> User: Location ID
+
+newpage
+
+== Edit "Per User" Emergency Location ==
+User -> EL: Get Emergency Location
+EL -> User: Emergency Location
+User -> EL: Validate location address
+EL -> ss: validate address
+EL -> md: validate address
+EL -> e911p: MSAG validation w/ provider
+EL -> User: Address is valid
+User -> EL: Edited Location
+alt is limited user
+    alt is owned by user
+        EL -> EL: update location
+        alt has dialers
+            EL -> eltopic: Publish emergency location\nwith all assigned dialers
+        end
+            EL -> User: Success
+    else
+        EL -> User: 403 Forbidden "Owned by other"
+    end
+else
+    EL -> EL: update location
+    alt has dialers
+        EL -> eltopic: Publish emergency location\nwith all assigned dialers
+    end
+end
+
+newpage
+
+== Edit "Account" Emergency Location ==
+User -> EL: Get Emergency Location
+EL -> User: Emergency Location
+User -> EL: Validate location address
+EL -> ss: validate address
+EL -> md: validate address
+EL -> e911p: MSAG validation w/ provider
+EL -> User: Address is valid
+alt is limited user
+    User -> User: clone location, owned by user
+    User -> EL: Create Location
+    User -> EL: assign location to owned dialers
+else
+    User -> EL: Edited Location
+    EL -> EL: update location
+    alt has dialers
+        EL -> eltopic: Publish emergency location\nwith all assigned dialers
+    end
+end
+
+newpage
+
+== Delete Emergency Location ==
+User -> EL: Delete Emergency Location
+alt has dialers
+    EL -> User: 409 Error,\nLocation has dialers
+else
+    EL -> User: Deleted
+end
+
+== Display Location Assignment page ==
+User -> EL : List dialers\nwith assignments
+EL -> User: Dialer List
+
+newpage
+
+== Read new dialer ==
+dialerq -> EL: Dialer created
+EL -> EL: Save dialer
+
+== Read deleted dialer ==
+dialerq -> EL: Dialer deleted
+EL -> EL: Remove assignment
+EL -> eltopic: Publish associated emergency location\nwith all remaining dialers
+note left
+is publishing necessary in this case?
+end note
+
+== (re)assign dialer ==
+User -> EL: Assign dialer to\nemergency location
+alt dialer is known to service and location ownership permits assignment
+EL -> eltopic: Publish emergency location\nwith all assigned dialers
+EL -> User: Success
+else
+EL -> User: 404 Dialer not found
+end
+
+@enduml

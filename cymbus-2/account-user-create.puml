@@ -1,0 +1,187 @@
+@startuml
+
+participant ui as "API \nConsumer"
+participant apigw as "API \nGateway"
+participant ax as "Ax"
+queue sdlq as "SDL Queue"
+participant sdl as "Stretto Device \nLine / RPC"
+participant stretto as "Stretto"
+participant vm as "Voicemail"
+queue axcud as "Ax CUD"
+participant cpe as "CPEs"
+participant cd as "Contacts & Directories"
+queue cdq as "Contacts & \nDirectories \nEvents"
+participant tn as "TN Management"
+participant prov as "Device \nProvisioning"
+participant c2d as "Cymbus 2 \nDevices"
+participant msg as "Messenging"
+participant zm as "Zoom \nIntegration"
+
+group CUD account
+    ui -> apigw: CUD account
+    apigw -> ax: CUD account
+    ax -> sdl: CUD account
+    sdl -> stretto: CUD Account group
+    ax -\ axcud: CUD account
+    
+    group async CUD processing
+        axcud -\ cpe
+        note over cpe
+            account groups /
+            extension space?
+        end note
+    else
+        axcud -\ cd
+        note over cd
+            CUD account
+            directory
+        end note
+        cd -\ cdq
+    else
+        axcud -\ msg
+        note over msg
+            CUD messenging directories?
+        end note
+    else
+        axcud -\ zm
+        note over zm
+            CUD zoom organization?
+        end note
+    else
+        axcud -\ tn
+        note over tn
+            drop (nothing to do)
+        end note
+    else
+        axcud -\ prov
+        note over prov
+            * digit map for account
+            * other account data?
+        end note
+        prov -> c2d: CUD account group
+    end
+end
+
+newpage
+
+group CUD user
+    ui -> apigw: CUD user
+    apigw -> ax: CUD user
+    group CUD user processing
+        ax -> vm: CUD voicemail box
+    else
+        ax -\ sdlq: CUD user
+        sdlq -\ sdl: CUD user
+        sdl -> stretto: CUD user
+    else
+        ax -> axcud: CUD user
+
+        group async CUD processing
+            axcud -\ cpe
+            note over cpe
+                * user extension
+                * user call handling
+            end note
+        else
+            axcud -\ cd
+            note over cd
+                CUD user contact
+                in account directory
+            end note
+            cd -\ cdq
+        else
+            axcud -\ msg
+            note over msg
+                CUD user object?
+            end note
+        else
+            axcud -\ zm
+            note over zm
+                CUD zoom user
+            end note
+        else
+            axcud -\ tn
+            note over tn
+                drop (nothing to do)
+            end note
+        else
+            axcud -\ prov
+            note over prov
+                user data?
+            end note
+            prov -> c2d: CUD user
+            note over c2d
+                * CUD user
+                * CUD Cymbus 2 devices
+                * CUD SIP credentials
+            end note
+        end
+    end
+end
+
+newpage
+
+group CUD device-line
+    ui -> apigw: CUD device-line
+    apigw -> ax: CUD device-line
+    ax -> axcud: CUD device-line
+    
+    group async CUD processing
+        axcud -\ cpe
+        note over cpe
+            * SIP credentials
+            * tie to user call handling
+        end note
+    else
+        axcud -\ cd
+        note over cd
+            drop (nothing to do)
+        end note
+    else
+        axcud -\ tn
+        note over tn
+            drop (nothing to do)
+        end note
+    else
+        axcud -\ prov
+        note over prov
+            * sip credentials
+            * digit map prep
+            * device-specific settings
+        end note
+    end
+end
+
+newpage
+
+group CUD TN
+    ui -> apigw: CUD TN
+    apigw -> ax: CUD TN
+    ax -> axcud: CUD TN
+
+    group async CUD processing
+        axcud -\ cpe
+        note over cpe
+            * CUD TN
+            * route to destination
+        end note
+    else
+        axcud -\ cd
+        note over cd
+            drop (nothing to do)
+        end note
+    else
+        axcud -\ tn
+        note over tn
+            * CUD TN orders
+            * CUD E911 orders
+        end note
+    else
+        axcud -\ prov
+        note over prov
+            drop (nothing to do)
+        end note
+    end
+end
+
+@enduml

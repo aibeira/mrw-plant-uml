@@ -1,0 +1,11 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+|ILEC/Service Provider|
+start
+#lightgreen:Choose TNs to remove;
+#lightblue:Remove TNs from Inventory;
+|Alianza|
+#cyan:remove BYOTN process for each TN;
+
+@enduml

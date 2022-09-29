@@ -1,0 +1,32 @@
+@startuml
+
+skinparam ParticipantMaxSize 100
+skinparam BoxMargin 10
+skinparam maxmessagesize 85
+skinparam RoundCorner 10
+
+box "QF/CTL/LCC (Lumen)" #ff00ff
+    actor CSR as csr
+end box
+
+box Alianza #88ccff
+    participant "admin portal" as ap
+    participant "API" as api
+    participant "dynamic TN \ninventory" as dti
+end box
+
+box Lumen #8888ff
+    participant "dynamic TN \norder API" as lapi
+end box
+
+csr -> ap: request TNs
+ap -> api: request TNs
+api -> dti: request TNs
+dti -> lapi: request TNs
+
+... <b>minutes pass ...
+
+lapi -> dti: TNs assigned
+dti -> api: TNs assigned
+
+@enduml

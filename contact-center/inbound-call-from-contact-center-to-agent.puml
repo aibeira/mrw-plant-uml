@@ -1,0 +1,22 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+participant "Agent Device" as agent
+participant "SBC" as sbc
+participant Intermedia as im
+participant CPE2 as cpe2
+
+im -> sbc: INVITE\n To: DID2\n From: callerId\n LDN: DID1
+sbc -> cpe2: INVITE\n To: DID2\n From: callerId\n LDN: DID1
+note over cpe2
+    follow normal
+    routing for DID2
+    (route to
+    agent device)
+end note
+cpe2 -> sbc: INVITE\n To: device\n From: callerId
+sbc -> agent: INVITE\n To: device\n From: callerId
+
+@enduml

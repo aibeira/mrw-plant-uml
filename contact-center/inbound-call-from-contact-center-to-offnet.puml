@@ -1,0 +1,27 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+participant "PSTN" as pstn
+participant "SBC" as sbc
+participant Intermedia as im
+participant CPE2 as cpe2
+
+im -> sbc: INVITE\n To: TN1\n From: callerId\n LDN: DID1
+sbc -> cpe2: INVITE\n To: TN1\n From: callerId\n LDN: DID1
+note over cpe2
+    recognize DID1 and
+    link to account
+end note
+note over cpe2
+    recognize TN1 is not
+    on platform, and route
+    off-net according to
+    off-net routing rules
+    for account
+end note
+cpe2 -> sbc: INVITE\n To: TN1\n From: callerId
+sbc -> pstn: INVITE\n To: TN1\n From: callerId
+
+@enduml

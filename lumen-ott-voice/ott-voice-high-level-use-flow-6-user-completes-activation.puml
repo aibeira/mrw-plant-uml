@@ -1,0 +1,39 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+'skinparam ParticipantPadding 20
+skinparam ParticipantMaxSize 100
+skinparam BoxMargin 10
+skinparam maxmessagesize 85
+skinparam RoundCorner 10
+
+actor "customer" as u
+box Alianza work to be done here
+    participant "OTT \nVoice \nAPI" as ottapi #cceeff
+    participant "Activation UI" as eup #cceeff
+    participant "Alianza \nPlatform" as ax #cceeff
+end box
+participant "Lumen \nBack \nEnd" as lsfc #ee99ff
+participant "Lumen/L3 \nB2B API" as l3b2b #ee99ff
+
+group user completes activation
+    u -> eup: access activation portal
+    eup -> ax: get theme for brand
+    eup <-> u: collect user data, assign devices and TNs
+    eup -> ottapi: create/update users, assign TNs and devices
+    ottapi -> ax: create account
+    opt new numbers reserved
+        ottapi -> ax: activate new numbers
+        ax -> l3b2b: activate new numbers
+    end
+    ottapi -> ax: create/update users, assign TNs and devices
+    loop once for each user created
+        ax --\ u: email welcome email w/ link to voice portal
+    end
+    ottapi -> lsfc: "customer has completed activation"
+    ottapi -> ottapi: remove payload data
+end
+
+@enduml

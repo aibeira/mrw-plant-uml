@@ -1,0 +1,15 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+|ILEC/Service Provider|
+
+start
+#lightgreen:Choose Account to delete;
+#lightblue:Delete account;
+|Alianza|
+:Remove all objects from Account;
+:Remove all TNs from Account;
+#cyan:Deactivate BYOTN process for all TNs on account;
+stop
+
+@enduml

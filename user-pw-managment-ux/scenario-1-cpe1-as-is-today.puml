@@ -1,0 +1,16 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+:User/Account created;
+:User Password set to first and last name based password;
+:User logs into EUP;
+if ("must change password" set) then (yes)
+    :User is prompted for new password;
+    :User password is changed;
+else (no)
+endif
+:User uses EUP;
+stop
+
+@enduml

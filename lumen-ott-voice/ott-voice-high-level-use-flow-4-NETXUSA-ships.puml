@@ -1,0 +1,25 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+'skinparam ParticipantPadding 20
+skinparam ParticipantMaxSize 100
+skinparam BoxMargin 10
+skinparam maxmessagesize 85
+skinparam RoundCorner 10
+
+box Alianza work to be done here
+    participant "OTT \nVoice \nAPI" as ottapi #cceeff
+    participant "Alianza \nPlatform" as ax #cceeff
+end box
+participant "<font color=white>NETXUSA" as nx #24117E
+participant "Lumen \nBack \nEnd" as lsfc #ee99ff
+
+group NETXUSA ships device order
+    nx -> ottapi: order shipped, MACs
+    ottapi -> lsfc: order tracking info, MACs
+    ottapi -> ax: put devices on account
+end
+
+@enduml

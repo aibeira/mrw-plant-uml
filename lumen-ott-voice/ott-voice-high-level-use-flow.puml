@@ -1,0 +1,22 @@
+@startuml
+
+(*) -right-> "customer \nstarts HSI \npurchase"
+-right-> "Alianza \nIFRAME \npresents \nvoice package"
+-right-> "customer \nchooses \nvoice \npackage, \ninc # users \nand porting"
+--> "customer \ncompletes \npurchase"
+-left-> "Lumen \nnotifies \nAlianza of \ncomplete"
+-left-> "Alianza \ncreates \nCPE order"
+-left-> "customer \naccesses \nactivation app"
+
+partition "activation pages" {
+  --> "provide/confirm \nTN information"
+  -right-> "porting \nnumber \nand details"
+  -right-> "user & \ndevice \ndetails"
+}
+
+--> "Alianza \ncreates \naccount"
+-left-> "customer \nsent emails \nfor each user"
+-left-> "customer \naccesses EUP \nto manage \naccount"
+-left-> (*)
+
+@enduml

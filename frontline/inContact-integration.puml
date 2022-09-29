@@ -1,0 +1,73 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+participant "Bandwidth" as c
+participant "Alianza" as alz #c8c8c8
+participant "NICE inContact" as icm
+participant "Call Center Agent" as bria
+participant "Escalation" as esc
+
+'bria -> icm: agent goes ready
+'c -> alz: INVITE TN
+'alz -> icm: INVITE TN
+'note over icm
+'    perform call
+'    center routing logic
+'end note
+'icm -> alz: 302 Redirect to \nagent extension
+'note over icm
+'    here, NICE inContact
+'    is no longer in the
+'    call flow
+'end note
+'alz -> bria: INVITE extension
+'note over bria
+'    agent
+'    accepts
+'    call
+'end note
+'bria -> icm: agent is reported busy
+'c <--> bria: audio
+'c -> alz: BYE
+'alz -> bria: BYE
+'newpage
+
+
+c -[#navy]> alz: INVITE TN
+alz -[#navy]> icm: INVITE TN
+icm -[#navy]> alz: 200
+note over icm
+    perform call
+    center routing logic
+end note
+icm -[#green]> alz: INVITE agent extension
+alz -[#green]> bria: INVITE extension
+note over bria
+    agent
+    accepts
+    call
+end note
+bria -[#green]> alz: 200
+bria -> icm: agent is reported busy
+c <-[#navy]-> alz: audio
+alz <-[#navy]-> icm: audio
+alz <-[#green]-> bria: audio
+bria -[#gold]> alz: INVITE escalation (3-way call)
+alz -[#gold]> esc: INVITE
+esc -[#gold]> alz: 200
+esc <-[#gold]-> alz: audio
+alz <-[#gold]-> bria: audio
+note over bria
+    mix audio from
+    NICE + escalation
+end note
+bria <-[#green]-> alz: audio
+alz <-[#green]-> icm: audio
+alz <-[#navy]-> icm: audio
+alz <-[#navy]-> c: audio
+c -> alz: BYE
+alz -> bria: BYE
+
+@enduml

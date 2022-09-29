@@ -1,0 +1,37 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+'skinparam ParticipantPadding 20
+skinparam ParticipantMaxSize 100
+skinparam BoxMargin 10
+skinparam maxmessagesize 85
+skinparam RoundCorner 10
+
+actor "customer" as u
+participant "HSI Buy Site" as lweb #ee99ff
+participant "OTT \nVoice \nPlug-in \n('magic \nwindow')" as ott #cceeff
+box Alianza work to be done here
+    participant "OTT \nVoice \nAPI" as ottapi #cceeff
+end box
+participant "<font color=white>NETXUSA" as nx #24117E
+
+group initial buy-flow
+    u -> lweb: "I want to buy HSI"
+    lweb <-> u: look up address, complete HSI selection
+    lweb -> ott: start OTT voice selection
+    ott -> u: "which OTT voice?"
+    u -> ott: "professional, 5 users, keep TN"
+    ott -> ottapi: "professional, 5 users, keep TN"
+    ott -> lweb: "professional, 5 users, keep TN"
+    lweb <-> u: complete buy process, collect money, shipping address, etc...
+    alt Customer presented with summary after purchase
+        lweb -> u: summary, link to ott voice site
+    else Lumen tells Alianza the buy is completed
+        lweb -> ottapi: "purchase complete"
+        ottapi -> nx: create device order
+    end
+end
+
+@enduml

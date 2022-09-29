@@ -1,0 +1,68 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+participant "Service Provider" as sp
+participant "Alianza" as alz
+participant "Bandwidth" as bw
+
+note over alz #cyan
+    create BYTON
+    remove SAE
+end note
+alz -> bw: create BYOTN remove order\n(/importTnOrder/voice/remove)
+note over bw #lightgreen
+    validate TN
+    can be removed
+end note
+alt "can be removed"
+    bw -> alz: OK w/ order ID
+else "cannot be removed"
+    bw -> alz: Error
+    note over alz #cyan
+        close BYOTN remove
+        SAE w/ error
+    end note
+    note over alz #cyan
+        notify of failure
+    end note
+    note over alz #cyan
+        work on removal
+        manually
+    end note
+end
+
+... [time passes] ...
+note over bw #lightgreen
+    de-provision
+    TN in routing
+end note
+alt "successfully de-provisioned"
+    bw -> alz: order complete
+    alz -> bw: OK
+    note over alz #cyan
+        close BYOTN remove
+        SAE w/ success
+    end note
+    note over alz #cyan
+        remove TN from inventory
+    end note
+else "failed de-provisioning"
+    bw -> alz: order failure
+    alz -> bw: OK
+    note over alz #cyan
+        close BYOTN remove
+        SAE w/ error
+    end note
+    note over alz #cyan
+        notify of failure
+    end note
+    note over alz #cyan
+        work on removal
+        manually
+    end note
+end
+
+
+@enduml

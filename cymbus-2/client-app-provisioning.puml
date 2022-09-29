@@ -1,0 +1,38 @@
+@startuml
+
+participant client as c
+participant "DRP" as vdl
+participant "dev-con" as cs
+participant ax as ax
+participant "messaging-service" as ms
+participant "sip-push" as sp
+participant "zoom" as zm
+participant "CPE" as ass
+
+c -> ax: login user
+ax -> c: identity
+c -> vdl: identity & deployment-id
+vdl -> cs: retrieve config
+vdl -> c: provisioning data
+c -> ass: SIP register
+c -> ms: login to messenging
+c -> zm: login to zoom
+c -> sp: register
+sp -> ass: SIP register
+...
+sp <-- ass: receive calls
+c <--> ass: place/receive calls
+
+'ass <-> x: call setup/teardown
+
+
+====
+
+'c -> ax: login
+'ax -> c: login user
+'ax -> vdl: identity
+'vdl -> cs: retrieve config
+'vdl -> c: provisioning data
+
+
+@enduml

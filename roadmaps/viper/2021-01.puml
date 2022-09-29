@@ -1,0 +1,71 @@
+@startgantt
+<style>
+    task {
+        FontSize 16
+        FontStyle bold
+        FontColor navy
+        BackgroundColor lightyellow
+        LineColor black
+    }
+    timeline {
+        BackgroundColor lightblue
+    }
+    arrow {
+        LineColor white
+    }
+    milestone {
+        FontSize 16
+    }
+</style>
+projectscale monthly zoom 1
+
+Project starts 2022-01-01
+'then [cymbus 2] lasts 12 weeks
+then [Aerospike upgrade] lasts 8 weeks and is colored in #a8f
+then [Common Registration] lasts 8 weeks and is colored in #a8f
+then [SIP Trunk CPE2] as [ST CPE2] lasts 16 weeks and is colored in #a8f
+[Migrate SIP Trunks CPE2] as [mst]  starts after [ST CPE2]'s end and lasts 52 weeks and is colored in pink
+[Common VM Msg Management] lasts 10 weeks and starts after [ST CPE2]'s end and is colored in #a8f
+then [Cassandra upgrade] lasts 8 weeks and is colored in #a8f
+then [Mobile 911 implementation] lasts 8 weeks and is colored in lightgreen
+then [Shared MWI] lasts 10 weeks and is colored in #a8f
+then [Business Lines/Residential TUI Parity] as [BL/Resi TUI Parity] lasts 10 weeks and is colored in #a8f
+then [Business Lines on CPE2] as [BL CPE2] lasts 8 weeks and is colored in #a8f
+[Migrate Business Lines to CPE2] as [Migrate BL CPE2] lasts 26 weeks and is colored in pink and starts after [BL CPE2]'s end
+[Residential CPE2 Parity] as [resi] lasts 12 weeks and starts after [BL CPE2]'s end and is colored in #a8f
+[Migrate Residential CPE2] as [resim] lasts 52 weeks and is colored in pink and starts after [resi]'s end
+[CPE1 shutdown] as [cpe1sd] happens on 2 weeks after [resim]'s end and displays on same row as [resim]
+[Music on Hold Improvements 2] as [MOH Improvements 2] lasts 8 weeks and starts after [resi]'s end and is colored in lightgreen
+then [Common Extension Management] lasts 12 weeks and is colored in #a8f
+then [SIP Trunk From Ax] as [ST From Ax] lasts 12 weeks and is colored in #a8f
+then [Residential/BCC Product Extract from Ax] lasts 12 weeks and is colored in #a8f
+then [Business Lines Hunting Strategies] as [BL Hunting Strategies] lasts 8 weeks and is colored in lightgreen
+then [Business Lines Forwarding Options] as [BL Forwarding Options] lasts 6 weeks and is colored in lightgreen
+then [Business Lines Simplified IVR] as [BL Simplified IVR] lasts 8 weeks and is colored in lightgreen
+then [SIP Trunk Monitoring] as [ST Monitoring] lasts 12 weeks and is colored in lightgreen
+then [SIP Trunk Bursting] as [ST Bursting] lasts 6 weeks and is colored in lightgreen
+
+then [THE END] as [end] lasts 1 day and is colored in #fff
+
+[Maintain CPE1] starts 2022-01-01 and ends after [cpe1sd]'s end and is colored in #fcf
+[Incidentals] starts 2022-01-01 and ends after [end]'s end and is colored in lightcyan
+[Bug Fixes] starts 2022-01-01 and ends after [end]'s end and is colored in lightgrey
+
+2022-01-01 is colored in black
+'2022-04-01 is colored in lightgrey
+'2022-07-01 is colored in lightgrey
+'2022-10-01 is colored in lightgrey
+2023-01-01 is colored in black
+'2023-04-01 is colored in lightgrey
+'2023-07-01 is colored in lightgrey
+'2023-10-01 is colored in lightgrey
+2024-01-01 is colored in black
+'2024-04-01 is colored in lightgrey
+'2024-07-01 is colored in lightgrey
+'2024-10-01 is colored in lightgrey
+2025-01-01 is colored in black
+'2025-04-01 is colored in lightgrey
+'2025-07-01 is colored in lightgrey
+'2025-10-01 is colored in lightgrey
+
+@endgantt

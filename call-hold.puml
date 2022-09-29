@@ -1,0 +1,88 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+actor "x3001" as x3001
+
+box ash
+    participant "ash-access" as asbca
+    participant "ash-ms" as ams
+    participant "ash-cd" as acd
+    participant "ash-srs" as asrs
+    participant "ash-reg" as areg
+    participant "ash-aero" as aaero
+end box
+
+participant "c*" as c
+
+box sac
+    participant "sac-aero" as saero
+    participant "sac-reg" as sreg
+    participant "sac-srs" as ssrs
+    participant "sac-cd" as scd
+    participant "sac-ms" as sms
+    participant "sac-access" as ssbca
+end box
+
+actor "x3000" as x3000
+actor "x3002" as x3002
+
+group x3000 registers in sac
+    x3000 -> ssbca: REGISTER 3000
+    ssbca -> scd: REGISTER 3000
+    scd -> sreg: Register 3000
+    sreg -> c: 3000 thru sac-access
+end group
+
+group x3002 registers in sac
+    x3002 -> ssbca: REGISTER
+    ssbca -> scd: REGISTER 3002
+    scd -> sreg: Register 3002
+    sreg -> c: 3002 thru sac-access
+end group
+
+group x3001 registers in ash
+    x3001 -> asbca: REGISTER
+    asbca -> acd: REGISTER 3002
+    acd -> areg: Register 3002
+    areg -> c: 3002 thru sac-access
+end group
+
+group x3001 calls x3000
+    x3001 -> asbca: INVITE 3000 (call-1-a)
+    asbca -> acd: INVITE 3000 (call-1-a)
+    acd -> asrs: NewCall 3001 -> 3000 (call-1-a)
+    note over asrs, aaero
+        call-1-a in ash
+    end note
+    asrs -> c: where's 3000?
+    c -> asrs: thru sac-access
+    asrs -> aaero: Ringing
+    asrs -> c: Ringing in ash
+    note over asrs, aaero
+        call-1-b in ash
+    end note
+    asrs -> acd: JoinTo sac-access
+    acd -> ssbca: INVITE 3000 (call-1-b)
+    ssbca -> x3000: INVITE 3000 (call-1-b)
+    x3000 -> ssbca: Ok (call-1-b)
+    ssbca -> acd: Ok (call-1-b)
+    acd -> asrs: Connected (call-1-b)
+    acd -> asrs: Connected (call-1-a)
+    asrs -> aaero: Connected (call-1-a)
+    asrs -> aaero: Connected (call-1-b)
+    asrs -> c: Connected in ash (call-1-a)
+    asrs -> c: Connected in ash (call-1-b)
+end group
+
+group x3000 parks x3001 in spot 100
+    x3000 -> ssbca: (re)INVITE (call-1-b) to hold
+    ssbca -> acd: (re)INVITE (call-1-b) to hold
+    acd -> asrs: holding (call-1-b)
+    asrs -> acd: Join (call-1-a) to ash-ms for MoH (call-1-c)
+    acd -> ams: INVITE MoH (call-1-c)
+    ams -> acd: Ok (call-1-c)
+
+    x3000 -> ssbca: INVITE #00#100
+end group
+
+@enduml

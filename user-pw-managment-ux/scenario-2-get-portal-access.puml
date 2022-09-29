@@ -1,0 +1,14 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+
+:User cannot log into EUP;
+:User contacts SP support to request portal access;
+:SP Support collects and saves unique email address on account;
+:Password reset initiated;
+#cff :Password Reset ;
+
+stop
+
+@enduml

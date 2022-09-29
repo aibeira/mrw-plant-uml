@@ -1,0 +1,29 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+|ILEC/Service Provider|
+
+|Alianza|
+start
+:Remove TN from Account;
+:Deactivate TN in Bandwidth;
+:Put TN in 'BYOTN Cooldown';
+note right
+    TNs in BYOTN Cooldown
+    are not part of normal
+    inventory & not part of
+    normal cooldown process
+end note
+switch (TN leaves BYOTN cooldown)
+    case (cooldown expires)
+      :return TN to inventory;
+      stop
+    case (recovered)
+      :return TN to inventory;
+      stop
+    case (TN removed from inventory)
+      #cyan:remove BYOTN from inventory process;
+      stop
+endswitch
+
+@enduml

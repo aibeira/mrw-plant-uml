@@ -1,0 +1,30 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+|ILEC/Service Provider|
+
+|Alianza|
+
+start
+:Create Add BYOTN order;
+:Push TN to Bandwidth;
+|Bandwidth|
+:Validate TN can be added;
+if (cannot be added?)
+    |Bandwidth|
+    :Callback w/ error to Alianza;
+    |Alianza|
+    :Close BYOTN order w/ error;
+    :Send notification of error;
+    end
+else
+    |Bandwidth|
+    :Provision ported TN in routing;
+    :Callback w/ success to Alianza;
+    |Alianza|
+    :Close BYOTN order w/ success;
+    :Add TN to inventory;
+    end
+endif
+
+@enduml

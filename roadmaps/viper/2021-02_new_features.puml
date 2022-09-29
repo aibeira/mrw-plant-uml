@@ -1,0 +1,57 @@
+@startgantt
+<style>
+    task {
+        FontSize 16
+        FontStyle bold
+        FontColor navy
+        BackgroundColor lightyellow
+        LineColor black
+    }
+    timeline {
+        BackgroundColor lightblue
+    }
+    arrow {
+        LineColor white
+    }
+    milestone {
+        FontSize 16
+    }
+</style>
+projectscale monthly zoom 1
+
+Project starts 2022-01-01
+then [Aerospike upgrade] lasts 8 weeks and is colored in #a8f
+then [Cassandra upgrade] lasts 8 weeks and is colored in #a8f
+then [Mobile 911 implementation] lasts 8 weeks and is colored in lightgreen
+then [Common Extension Management] lasts 12 weeks and is colored in #a8f
+then [SIP Trunk From Ax] as [ST From Ax] lasts 12 weeks and is colored in #a8f
+then [Residential/BCC Product Extract from Ax] lasts 12 weeks and is colored in #a8f
+then [Business Lines Hunting Strategies] as [BL Hunting Strategies] lasts 8 weeks and is colored in lightgreen
+then [Business Lines Forwarding Options] as [BL Forwarding Options] lasts 6 weeks and is colored in lightgreen
+then [Business Lines Simplified IVR] as [BL Simplified IVR] lasts 8 weeks and is colored in lightgreen
+then [SIP Trunk Monitoring] as [ST Monitoring] lasts 12 weeks and is colored in lightgreen
+then [SIP Trunk Bursting] as [ST Bursting] lasts 6 weeks and is colored in lightgreen
+
+then [THE END] as [end] lasts 1 day and is colored in #fff
+
+[Incidentals] starts 2022-01-01 and ends after [end]'s end and is colored in lightcyan
+[Bug Fixes] starts 2022-01-01 and ends after [end]'s end and is colored in lightgrey
+
+2022-01-01 is colored in black
+'2022-04-01 is colored in lightgrey
+'2022-07-01 is colored in lightgrey
+'2022-10-01 is colored in lightgrey
+2023-01-01 is colored in black
+'2023-04-01 is colored in lightgrey
+'2023-07-01 is colored in lightgrey
+'2023-10-01 is colored in lightgrey
+2024-01-01 is colored in black
+'2024-04-01 is colored in lightgrey
+'2024-07-01 is colored in lightgrey
+'2024-10-01 is colored in lightgrey
+2025-01-01 is colored in black
+'2025-04-01 is colored in lightgrey
+'2025-07-01 is colored in lightgrey
+'2025-10-01 is colored in lightgrey
+
+@endgantt

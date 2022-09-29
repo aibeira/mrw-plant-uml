@@ -1,0 +1,15 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+|ILEC/Service Provider|
+
+start
+#lightblue:Receive notice of port out;
+#lightgreen:Manage, and complete port out;
+#lightblue:Tell Alianza of port out w/o delete account;
+|Alianza|
+:Mark TN as ported out;
+#cyan:Remove BYOTN from Inventory process;
+stop
+
+@enduml

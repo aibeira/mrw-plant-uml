@@ -1,0 +1,21 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+participant caller as caller
+participant "alianza platform" as alz
+participant "pstn carrier" as pstn
+participant "device 1" as d1
+participant "device 2" as d2
+
+caller -> alz: INVITE TN1
+alz -> pstn: INVITE TN2
+alz -> d1: INVITE d1
+alz -> d2: INVITE d2
+pstn -> alz: 404
+alz -> pstn: Ok
+alz -> d1: Cancel
+alz -> d2: Cancel
+
+@enduml

@@ -1,0 +1,99 @@
+@startuml
+
+hide stereotype
+
+skinparam node {
+    FontColor<<am>> #ffffff
+    FontStyle<<am>> bold
+    BackgroundColor<<am>> #0072BC
+}
+
+node "Alianza User" as alzu #DEFFFC
+
+node "Partition 1" as p1 {
+    node "Platform User" as plu #D1B1C8
+    [Partition Settings] as pts
+    
+    node "Account 1" as acc1 {
+        node "End User Admin" as eua1 #CBFF4D
+        node "End User Limited" as eul1 #F7FF58
+        node "Account Manager" as euam1 <<am>>
+        
+        [AAs] as aa1
+        [SIP Trunks] as sipt1
+        [Phone Numbers] as tns1
+        
+        eua1 -> eua1
+        eua1 --> aa1
+        eua1 --> sipt1
+        eua1 --> tns1
+        eul1 <- eua1
+        eul1 -> eul1
+
+        euam1 --> eua1
+        euam1 --> eul1
+        euam1 --> aa1
+        euam1 --> sipt1
+        euam1 --> tns1
+    }
+
+    node "Account 2" as acc2 {
+        node "End User Admin" as eua2 #CBFF4D
+        node "End User Limited" as eul2 #F7FF58
+        node "Account Manager" as euam2 #eee
+        
+        [AAs] as aa2
+        [SIP Trunks] as sipt2
+        [Phone Numbers] as tns2
+        
+        eua2 -> eua2
+        eua2 --> aa2
+        eua2 --> sipt2
+        eua2 --> tns2
+        eul2 <- eua2
+        eul2 -> eul2
+        
+        euam2 --> eua2
+        euam2 --> eul2
+        euam2 --> aa2
+        euam2 --> sipt2
+        euam2 --> tns2
+    }
+
+    plu -----> acc1
+    plu --> acc2
+    plu --> pts
+}
+
+node "Partition 2" as p2 {
+    [Partition Settings] as pts2
+
+    node "Platform User" as plu2 #D1B1C8
+
+    node "Account 3" as a3 {
+      node "End User Admin" #CBFF4D
+    }
+    node "Account 4" as a4 {
+      node "End User Admin" as eua4 #CBFF4D
+    }
+
+    node "Sub-Partition 2.1" as sp2 {
+        node "Platform User" as plu21 #D1B1C8
+
+        node "Account 5" as a5 {
+          node "End User Admin" as eua5 #CBFF4D
+        }
+
+        plu21 --> a5
+    }
+
+    pts2 <- plu2
+    plu2 --> a4
+    plu2 ---> a3
+    plu2 -> sp2
+}
+
+alzu -> p2
+alzu ----> p1
+
+@enduml
